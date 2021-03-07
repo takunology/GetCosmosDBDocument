@@ -62,7 +62,7 @@ namespace CosmosDBAccess
             }
         }
 
-        public static void SendMessage(HarvestData harvestData)
+        static void SendMessage(HarvestData harvestData)
         {
             var lineMessage = new LineMessage();
 
@@ -76,16 +76,16 @@ namespace CosmosDBAccess
                 "🥕 : " + harvestData.CarrotCount
             });
 
-            var Serializer = new DataContractJsonSerializer(typeof(LineMessage));
+            var serializer = new DataContractJsonSerializer(typeof(LineMessage));
             var ms = new MemoryStream();
-            Serializer.WriteObject(ms, lineMessage);
+            serializer.WriteObject(ms, lineMessage);
 
-            using (WebClient Client = new WebClient())
+            using (WebClient client = new WebClient())
             {
-                Client.Encoding = Encoding.UTF8;
-                Client.Headers.Add("Content-Type", "application/json");
-                Client.Headers.Add("Authorization", "Bearer " + token);
-                Client.UploadString(url, Encoding.UTF8.GetString(ms.ToArray()));
+                client.Encoding = Encoding.UTF8;
+                client.Headers.Add("Content-Type", "application/json");
+                client.Headers.Add("Authorization", "Bearer " + token);
+                client.UploadString(url, Encoding.UTF8.GetString(ms.ToArray()));
             }
         }
     }
